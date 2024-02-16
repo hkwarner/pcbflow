@@ -15,7 +15,7 @@ class DRC:
         self.via_track_width = MILS(12)
         # Clearances
         self.clearance = MILS(8)
-        self.outline_clearance = MILS(20)
+        self.outline_clearance = MILS(5)
         self.hole_clearance = MILS(20)
         # Soldermask
         self.mask_vias = False

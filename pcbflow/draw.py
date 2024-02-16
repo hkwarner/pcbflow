@@ -348,7 +348,7 @@ class Draw(Turtle):
         self.layer = next_layer
 
     def via(self, connect=None):
-        dv = self.board.drc.via_drill / 2 + self.board.drc.via_annular_ring
+        dv = 0#self.board.drc.via_drill / 2 + self.board.drc.via_annular_ring
         g = sg.Point(self.xy).buffer(dv)
         for layer in self.board.get_copper_layers():
             layer.add(g, connect)
@@ -356,7 +356,7 @@ class Draw(Turtle):
             self.board.layers[self.layer].connected.append(g)
         self.board.add_drill(self.xy, self.board.drc.via_drill)
         if self.board.drc.mask_vias:
-            gm = sg.Point(self.xy).buffer(dv + self.board.drc.soldermask_margin)
+            gm = sg.Point(self.xy).buffer(dv)
             self.board.add_to_mask_layers(gm)
         self.newpath()
         return self

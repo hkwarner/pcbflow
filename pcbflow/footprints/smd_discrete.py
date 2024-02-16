@@ -15,6 +15,34 @@ class Discrete2(PCBPart):
             self.pads[1].set_name(pad2)
         return self
 
+class wb_pad(Discrete2):
+    def __init__(self, *args, family="C", **kwargs):
+        self.family = family
+        super().__init__(*args, **kwargs)
+
+    def place(self, dc):
+        # Pads on either side
+        
+        dc.forward(1.0 / 2)
+        dc.rect(1.5,1)
+        self.smd_pad(dc)
+
+        # Silk outline of the package
+        dc.rect(1.5, 1)
+        dc.silk(side=self.side)
+        dc.push()
+        if dc.dir == 90:
+            dc.forward(-1.5)
+        else:
+            dc.forward(1.5)
+        # self.label(dc, angle=dc.dir)
+        # dc.pop()
+
+    def escape_2layer(self):
+        # escape for 2-layer board (VCC on GTL, GND on GBL)
+        self.pads[0].set_name("VCC").w("o f 0.5").wire()
+        self.pads[1].w("o -")
+
 
 class C0402(Discrete2):
     def __init__(self, *args, family="C", **kwargs):

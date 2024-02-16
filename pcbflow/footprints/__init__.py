@@ -8,3 +8,4 @@ from .special_pcb import *
 from .tssop import *
 from .xtal import *
 from .pin_header import *
+from .misc_pads import *

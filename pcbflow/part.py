@@ -222,6 +222,7 @@ class PCBPart:
             layer.add(g)
         p = dc.copy()
         p.part = self.id
+        print('here')
         self.pads.append(p)
 
     def rpad(self, dc, w, h):

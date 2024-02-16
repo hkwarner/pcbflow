@@ -17,7 +17,7 @@ import shapely.ops as so
 import math
 
 from pcbflow import *
-
+from pcbflow.route import Route
 
 class Board:
     def __init__(self, size=(80, 50)):
@@ -28,6 +28,7 @@ class Board:
         self.npth = defaultdict(list)
         self.keepouts = []
         self.layers = {}
+        self.rounded = False
 
         self.counters = defaultdict(lambda: 0)
         self.nets = []
@@ -617,7 +618,10 @@ class Board:
         x1, y1 = self.size
         x1 += r
         y1 += r
-        return sg.LinearRing([(x0, y0), (x1, y0), (x1, y1), (x0, y1)])
+        ring =  sg.LinearRing([(x0, y0), (x1, y0), (x1, y1), (x0, y1)])
+        if self.rounded:
+            ring.buffer(self.buffer_radius)
+        return ring
 
     def boundary_keepout(self):
         x0, y0 = (0, 0)
@@ -648,6 +652,8 @@ class Board:
         substrate = Layer(None, None)
         gml = self.layers["GML"].lines
         mask = sg.Polygon(gml[-1], gml[:-1])
+        if self.rounded:
+            mask.buffer(brd.buffer_radius)
         for d, xys in self.holes.items():
             if d > 0.3:
                 hlist = so.unary_union([sg.Point(xy).buffer(d / 2) for xy in xys])
